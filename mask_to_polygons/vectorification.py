@@ -6,9 +6,6 @@ import shapely
 import shapely.geometry
 from geojson import FeatureCollection
 
-from mask_to_polygons.processing import buildings
-from mask_to_polygons.processing import polygons
-
 
 def mask_from_geotiff(mask_filename):
     with rasterio.open(mask_filename, 'r') as dataset:
@@ -55,8 +52,10 @@ def geometries_from_mask(mask,
         transform = rasterio.transform.IDENTITY
 
     if mode == 'polygons':
+        from mask_to_polygons.processing import polygons
         polys = polygons.get_polygons(mask, transform)
     elif mode == 'buildings':
+        from mask_to_polygons.processing import buildings
         polys = buildings.get_polygons(mask, transform, min_aspect_ratio,
                                        min_area, width_factor, thickness)
     else:
